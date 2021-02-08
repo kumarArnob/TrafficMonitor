@@ -7,6 +7,7 @@ const formidable = require("formidable");
 var http = require('http');
 var fs = require('fs');
 const cors = require('cors');
+const csv = require('csv-parser');
 
 const app = express();
 app.use(express.static("public"));
@@ -35,6 +36,21 @@ const con = mysql.createConnection({
     
       console.log("Database , "+ con.state);
   });
+
+
+  //CSV Script ...
+  const path = ".\\data.csv";
+  app.get("/csvData", (req, res) => {
+
+    const result = [];
+    fs.createReadStream(path)
+        .pipe(csv())
+        .on('data',(data) =>result.push(data))
+       .on('end', () => {
+            res.send(result);
+        });
+
+});
   
 
 
@@ -79,7 +95,7 @@ app.post("/addfile",(req,res)=>{
         form.parse(req, function (err, fields, files) {
            
           var oldpath = files.video.path;
-          var newpath = 'C:\\NoobtoConqueror\\J S\\TrafficMonitor\\Client\\public\\videos' + files.video.name;
+          var newpath = 'C:\\NoobtoConqueror\\J S\\TrafficMonitor2\\server\\public\\videos' + files.video.name;
 
 
           fs.rename(oldpath, newpath, function (err) {
@@ -87,7 +103,7 @@ app.post("/addfile",(req,res)=>{
             console.log("File uploaded");
          });
 
-          connection.query("INSERT INTO `tarfficdata` (`ID`, `Name`, `location`) VALUES (NULL, '"+files.video.name+"','"+newpath+"')",(err,result)=>{
+          con.query("INSERT INTO `tarfficdata` (`ID`, `Name`, `location`) VALUES (NULL, '"+files.video.name+"','"+newpath+"')",(err,result)=>{
             if(err) throw err;
             
         });

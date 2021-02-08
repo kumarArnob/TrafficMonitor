@@ -42,7 +42,7 @@
         <div class="row">
             <div class="col-6 col-sm-6">
                 <video width="480" height="360" class="mt-5" controls>
-                    <source src="videos/vd.mp4" type="video/mp4" id="videoId">
+                    <source src="videosTraffic.mp4" type="video/mp4" id="videoId">
 
                 </video>
             </div>
@@ -62,7 +62,7 @@
 
                 <img src="images/img2.png" class="mt-5">
 
-                <button type="button" class="btn btn-info mt-2" onclick="clickhere()">Click Here</button>
+                <button type="button" class="btn btn-info mt-2" onclick="clickhere()">CSV FILE(JSON VIEW)</button>
 
 
 
@@ -131,7 +131,8 @@
             }
         }
         function clickhere() {
-            window.location.href = "http://localhost:3000/viewcsv";
+            window.location.href = "http://localhost:3000/csvData";
+
         }
 
 
@@ -156,14 +157,21 @@
                 return authors.map(function (author) {
                     let li = createNode('li');
 
-                    let a = createNode('a');
-                    a.className = "a" + author.ID + "";
+                    let span = createNode('span');
+                    span.className = "a" + author.ID + "";
 
-                    a.innerHTML = `${author.Name}`;
-                    a.href = "http://localhost:3000";
+                    span.innerHTML = `${author.Name}`;
+                    //span.onclick = "MyFunction()";
+                    span.onclick = function () {
+                        var vSrc = document.getElementById("videoId");
 
+                        // var url2 = "localhost:3000/loc?ID=?"
+                        var dynamicSrc = ""+author.location+"";
+                        console.log(dynamicSrc);
+                        vSrc.setAttribute("src", dynamicSrc);;
+                    };
 
-                    append(li, a);
+                    append(li, span);
                     append(ul, li);
                 })
             })
@@ -171,18 +179,11 @@
                 console.log(error);
             });
 
-        document.getElementsByClassName("" + authors.ID + "").onclick = function () { MyFunction() };
-
-
+        document.getElementsByClassName("a17").onclick = function () { MyFunction() };
 
         function MyFunction() {
 
-            var vSrc = document.getElementById("videoId");
 
-            var url2 = "localhost:3000/loc?ID=?"
-            var dynamicSrc = vbvb;
-            console.log(dynamicSrc);
-            vSrc.setAttribute("src", dynamicSrc);
 
         }
 
